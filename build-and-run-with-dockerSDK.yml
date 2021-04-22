@@ -1,0 +1,28 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+    - name: build container image
+      community.docker.docker_image:
+        build:
+          path: /Users/manuel/redhattask
+          pull: yes
+          rm: yes
+          target: redhattask
+        name: redhattask
+        source: build
+        state: present
+
+    - name: run tomcat in a docker container
+      community.docker.docker_container:
+        name: tomcat
+        image: "redhattask"
+        container_default_behavior: compatibility
+        state: started
+        published_ports: 8080:8080
+    
+    - name: testing war app is up
+      command: pytest test_serving_war.py
+
+ 

@@ -1,0 +1,31 @@
+---
+- name: Build an image with the command module for a docker host
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  tasks:
+    - name: the task 
+      block:
+        - name: testing container is running
+          command: pytest test_serving_war.py::test_container_is_running
+          register: result
+        - debug:
+            msg: "Container tomcat is already running...  nothing more to do"
+          when: result is succeeded
+      rescue:  
+        - name: build the image
+          command: docker build -t redhattask .
+
+        - name: run tomcat in a docker container
+          command: docker run -d --rm --name tomcat -p 8080:8080 redhattask 
+
+        - name: Pause for 5 seconds to wait the container start
+          pause:
+            seconds: 5
+
+        - name: testing war app is up
+          command: pytest test_serving_war.py::test_url_up
+
+    
+          

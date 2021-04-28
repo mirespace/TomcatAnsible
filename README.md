@@ -44,6 +44,10 @@ These instructions will get you a copy of the project up and running on your loc
 
 It is assumed that Docker and python3 is installed in your system.
 
+## Deployment <a name = "deployment"></a>
+
+Please, copy the files to a directory of your choice. Give execution permisions (chmod +x ) to the create_virt_env.bash.  
+
 ### Installing
 
 
